@@ -9,13 +9,13 @@
 
 .square {
   border: solid 1px black;
-  width: 6rem;
-  height: 6rem;
+  width: 4.5rem;
+  height: 4.5rem;
   background-color: green;
 }
 
 .placement {
-/*   border: solid black 1px; */
+  /* border: solid black 1px; */
   border-radius: 50%;
   width: 100%;
   height: 100%;
