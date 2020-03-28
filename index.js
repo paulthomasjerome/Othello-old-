@@ -8,15 +8,23 @@ let discCounter = 4;
  * Renders the current board state to the users viewport
 */
 const drawBoard = board => {
+  console.log('begin drawBoard()');
+  //select the board
+  $test = $('#test');
   //for each row of the board
+  for(let row = 0; row < board.length; row++) {
     //add this row to the board
+    $test.append('<div class="row"></div>');
     //for each space in this row
-      //add a cell to this row
-      //add appropriate classes 
-      //index the cell with data atributes
+    // for(let col = 0; col < board.length; col++) {
+    //   //add a cell to this row
+    //   $('.row')[row].html().append('<div class="square"><div class="placement"></div></div>');
+    //   //index the cell with data atributes
+    // }
+  }
 }
 
-//place a disc
+//POF for placing a disc, will be modified to represent the board array
 const discPlacement = player => {
   //if the user clicks on a square
   $('.square').click(function(){
@@ -81,4 +89,3 @@ const updateState = () => {
 startGame();
 //DELCOM we may have to encapsulate this in its own function to be part of the board drawing method
 discPlacement(player);
-updateState();
