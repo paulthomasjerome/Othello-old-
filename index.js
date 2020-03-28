@@ -7,20 +7,47 @@ let discCounter = 4;
 /** 
  * Renders the current board state to the users viewport
 */
+// const drawBoard = board => {
+//   console.log('begin drawBoard()');
+//   //select the board
+//   $test = $('#test');
+//   //for each row of the board
+//   for(let row = 0; row < board.length; row++) {
+//     //add this row to the board
+//     $test.append('<div class="row"></div>');
+//     //for each space in this row
+//     for(let col = 0; col < board.length; col++) {
+//       //add a cell to this row
+//       $('.row').append('<div class="square"><div class="placement"></div></div>');
+//       //index the cell with data atributes
+//     }
+//   }
+// }
+
 const drawBoard = board => {
   console.log('begin drawBoard()');
   //select the board
   $test = $('#test');
   //for each row of the board
   for(let row = 0; row < board.length; row++) {
-    //add this row to the board
-    $test.append('<div class="row"></div>');
+    //instantiate $row 
+    const $row = $('<div></div>').addClass('row');
     //for each space in this row
-    // for(let col = 0; col < board.length; col++) {
-    //   //add a cell to this row
-    //   $('.row')[row].html().append('<div class="square"><div class="placement"></div></div>');
-    //   //index the cell with data atributes
-    // }
+    for(let col = 0; col < board.length; col++) {
+      //instantiate square
+      const $square = $('<div></div>').addClass('square');
+      //instantiate placement
+      const $placement = $('<div></div>').addClass('placement');
+      $placement.attr('data-row', row);
+      $placement.attr('data-col', col);
+
+      //add placement to $square element 
+      $square.append($placement);
+
+      $row.append($square);
+    }
+  //add this row to the board
+  $test.append($row);
   }
 }
 
