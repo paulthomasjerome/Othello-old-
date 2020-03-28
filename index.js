@@ -25,9 +25,8 @@ let discCounter = 4;
 // }
 
 const drawBoard = board => {
-  console.log('begin drawBoard()');
   //select the board
-  $test = $('#test');
+  $board = $('#board');
   //for each row of the board
   for(let row = 0; row < board.length; row++) {
     //instantiate $row 
@@ -36,22 +35,26 @@ const drawBoard = board => {
     for(let col = 0; col < board.length; col++) {
       //instantiate square
       const $square = $('<div></div>').addClass('square');
+      
       //instantiate placement
       const $placement = $('<div></div>').addClass('placement');
+
+      //set index for each placement
       $placement.attr('data-row', row);
       $placement.attr('data-col', col);
 
-      //add placement to $square element 
+      //add $placement to $square 
       $square.append($placement);
 
+      //add $square to $row
       $row.append($square);
     }
   //add this row to the board
-  $test.append($row);
+  $board.append($row);
   }
 }
 
-//POF for placing a disc, will be modified to represent the board array
+//DELCOM refactor this method to be based on the board array
 const discPlacement = player => {
   //if the user clicks on a square
   $('.square').click(function(){
