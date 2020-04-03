@@ -1,13 +1,6 @@
-//instantiate the first player's color
-let player = 'black';
-
-//instantiate counter for filled spaces
-let discCounter = 4;
-
 /** 
  * Renders the current board state to the users viewport
 */
-
 const drawBoard = board => {
   //select the board
   const $board = $('#board');
@@ -27,9 +20,6 @@ const drawBoard = board => {
 
       //instantiate placement
       const $placement = $('<div></div>').addClass('placement');
-
-      //add $placement to $square 
-      $square.append($placement);
 
       //add $square to $row
       $row.append($square);
@@ -66,41 +56,134 @@ const discPlacement = player => {
   });
 }
 
+const piecesToFlip = (startRow, startCol, direction) => {
+  //instantiate flipPositions
+  const flipPositions = [];
+  let row = startRow;
+  let col = startCol;
+  //while we have not seen the players color
+  while(board[row][col] !== player) {
+    //if we see a blank space
+    if(board[row][col] === ' ') {
+      //dont record any positions
+      return;
+    }
+    //record the current position for our output
+    flipPositions.push({
+      row: row,
+      col: col
+    });
+    row += direction.row; 
+    col += direction.col;
+  }
+
+  return flipPositions;
+}
+
 /**
  * Initializes the initial state of the game and renders the board based on that state
  */
-const startGame = () => {
-  //set the initial state of the logical board
-  const board = [
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ','w','b',' ',' ',' '],
-    [' ',' ',' ','b','w',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],    
-  ];
+const Game = (move, player) => {
 
-  drawBoard(board);
+  if(player === 'b') {
+    opponent = 'w';
+  } else {
+    opponent = 'b';
+  }
 
-  //for each row of the board
-    //for each space in this row
-      //if a user clicks on this space
-        //if this space is empty
-          //if this is player black
+  const row = move.row;
+  const col = move.col;
 
-          //if this is player white
-        //else
-          //alert the user that this space is occupied
+  board[row][col] = player;
+  
+  console.log(board[row][col]);
+  console.log('linebreak');
+  console.log('the current player is ' + player);
+  console.log('linebreak');
+  console.log('the opposing player is currently ' + opponent);
+      // console.log(piecesToFlip(row, col - 1, direction));
 
+  // DELCOM we should find a way simply pass the valid directions
+  // to a single valid move  
+
+  const direction = {
+    row: 0,
+    col: 0
+  };
+  //try to place a piece on the board
+    //if (0)west([row][col - 1]) adjacent is opposite color
+    console.log(board[row][col - 1]);
+    if(board[row][col - 1] === opponent) {
+      direction.row = 0;
+      direction.col = -1;
+      const flipped = piecesToFlip(row, col - 1, direction);
+      console.log(flipped);
+      for(let i = 0; i < flipped.length; i++) {
+        board[flipped[i].row][flipped[i].col] = player;
+      }
+    }     
+    //if (1)southwest([row + 1][col - 1]) adjacent is opposite color
+    if(board[row + 1][col - 1] === opponent) {
+      direction.row = 1;
+      direction.col = -1;
+    }     
+    //if (2)south([row + 1][col]) adjacent is opposite color
+    if(board[row + 1][col] === opponent) {
+      direction.row = 1;
+      direction.col = 0;
+    }     
+    //if (3)southeast([row + 1][col + 1]) adjacent is opposite color
+    if(board[row + 1][col + 1] === opponent) {
+      direction.row = 1;
+      direction.col = 1;
+    }     
+    //if (4)east([row][col + 1]) adjacent is opposite color
+    if(board[row][col + 1] === opponent) {
+      direction.row = 0;
+      direction.col = 1;
+    }     
+    //if (5)northeast([row - 1][col + 1]) adjacent is opposite color
+    if(board[row - 1][col] === opponent) {
+      direction.row = -1;
+      direction.col = 1;
+    }     
+    //if (6)north([row - 1][col]) adjacent is opposite color
+    if(board[row][col-1] === opponent) {
+      direction.row = -1;
+      direction.col = 0;
+    }     
+    //if (7)northwest([row - 1][col - 1]) adjacent is opposite color
+    if(board[row - 1][col - 1] === opponent) {
+      direction.row = -1;
+      direction.col = -1;
+    }     
+  //catch the error and tell the player if this move is not vaild, game is over, or whatever else
+  console.log('linebreak');
+  console.log(board);
 }
 
-//flip over pieces depending on the board state
-const updateState = () => {
+//instantiate the first player's color
+let player = 'b';
 
+//set the initial state of the logical board
+const board = [
+  [' ',' ',' ',' ',' ',' ',' ',' '],
+  [' ',' ',' ',' ',' ',' ',' ',' '],
+  [' ',' ',' ',' ',' ',' ',' ',' '],
+  [' ',' ',' ','w','b',' ',' ',' '],
+  [' ',' ',' ','b','w',' ',' ',' '],
+  [' ',' ',' ',' ',' ',' ',' ',' '],
+  [' ',' ',' ',' ',' ',' ',' ',' '],
+  [' ',' ',' ',' ',' ',' ',' ',' '],    
+];
+
+//test move
+const theMove = {
+  row: 4,
+  col: 5
 }
 
-startGame();
-//DELCOM we may have to encapsulate this in its own function to be part of the board drawing method
-discPlacement(player);
+Game(theMove, player);
+
+
+
