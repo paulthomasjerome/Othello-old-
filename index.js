@@ -56,7 +56,7 @@ const discPlacement = player => {
   });
 }
 
-const piecesToFlip = (startRow, startCol, direction) => {
+const piecesToFlip = (startRow, startCol, direction, player) => {
   //instantiate flipPositions
   const flipPositions = [];
   let row = startRow;
@@ -83,16 +83,17 @@ const piecesToFlip = (startRow, startCol, direction) => {
 /**
  * Initializes the initial state of the game and renders the board based on that state
  */
-const Game = (move, player) => {
+const Game = (moveRow, moveCol, player) => {
 
   if(player === 'b') {
     opponent = 'w';
   } else {
     opponent = 'b';
   }
+
   let piecesFlipped = false;
-  const row = move.row;
-  const col = move.col;
+  const row = moveRow;
+  const col = moveCol;
   
   console.log(board[row][col]);
   console.log('linebreak');
@@ -102,7 +103,7 @@ const Game = (move, player) => {
       // console.log(piecesToFlip(row, col - 1, direction));
 
   // DELCOM we should find a way simply pass the valid directions
-  // to a single valid move  
+  // to a single valid move  html
 
   const direction = {
     row: 0,
@@ -113,7 +114,7 @@ const Game = (move, player) => {
     if(board[row][col - 1] === opponent) {
       direction.row = 0;
       direction.col = -1;
-      const flipped = piecesToFlip(row, col - 1, direction);
+      const flipped = piecesToFlip(row, col - 1, direction, player);
       console.log(flipped);
       if(flipped.length) {
         piecesFlipped = true;
@@ -126,7 +127,7 @@ const Game = (move, player) => {
     if(board[row + 1][col - 1] === opponent) {
       direction.row = 1;
       direction.col = -1;
-      const flipped = piecesToFlip(row + 1, col - 1, direction);
+      const flipped = piecesToFlip(row + 1, col - 1, direction, player);
       console.log(flipped);
       if(flipped.length) {
         piecesFlipped = true;
@@ -139,7 +140,7 @@ const Game = (move, player) => {
     if(board[row + 1][col] === opponent) {
       direction.row = 1;
       direction.col = 0;
-      const flipped = piecesToFlip(row + 1, col, direction);
+      const flipped = piecesToFlip(row + 1, col, direction, player);
       console.log(flipped);
       if(flipped.length) {
         piecesFlipped = true;
@@ -152,7 +153,7 @@ const Game = (move, player) => {
     if(board[row + 1][col + 1] === opponent) {
       direction.row = 1;
       direction.col = 1;
-      const flipped = piecesToFlip(row + 1, col + 1, direction);
+      const flipped = piecesToFlip(row + 1, col + 1, direction, player);
       console.log(flipped);
       if(flipped.length) {
         piecesFlipped = true;
@@ -165,7 +166,7 @@ const Game = (move, player) => {
     if(board[row][col + 1] === opponent) {
       direction.row = 0;
       direction.col = 1;
-      const flipped = piecesToFlip(row, col + 1, direction);
+      const flipped = piecesToFlip(row, col + 1, direction, player);
       console.log(flipped);
       if(flipped.length) {
         piecesFlipped = true;
@@ -178,7 +179,7 @@ const Game = (move, player) => {
     if(board[row - 1][col] === opponent) {
       direction.row = -1;
       direction.col = 1;
-      const flipped = piecesToFlip(row - 1, col + 1, direction);
+      const flipped = piecesToFlip(row - 1, col + 1, direction, player);
       console.log(flipped);
       if(flipped.length) {
         piecesFlipped = true;
@@ -191,7 +192,7 @@ const Game = (move, player) => {
     if(board[row][col-1] === opponent) {
       direction.row = -1;
       direction.col = 0;
-      const flipped = piecesToFlip(row - 1, col, direction);
+      const flipped = piecesToFlip(row - 1, col, direction, player);
       console.log(flipped);
       if(flipped.length) {
         piecesFlipped = true;
@@ -204,7 +205,7 @@ const Game = (move, player) => {
     if(board[row - 1][col - 1] === opponent) {
       direction.row = -1;
       direction.col = -1;
-      const flipped = piecesToFlip(row - 1, col - 1, direction);
+      const flipped = piecesToFlip(row - 1, col - 1, direction, player);
       console.log(flipped);
       if(flipped.length) {
         piecesFlipped = true;
@@ -216,6 +217,7 @@ const Game = (move, player) => {
 
   if(piecesFlipped) {
     board[row][col] = player;
+    currentPlayer = opponent;
   } else {
     alert('invalid move, try again!');
   }
@@ -225,7 +227,7 @@ const Game = (move, player) => {
 }
 
 //instantiate the first player's color
-let player = 'w';
+let currentPlayer = 'b';
 
 //set the initial state of the logical board
 const board = [
@@ -239,13 +241,7 @@ const board = [
   [' ',' ',' ',' ',' ',' ',' ',' '],    
 ];
 
-//test move
-const theMove = {
-  row: 2,
-  col: 5
-}
-
-Game(theMove, player);
+Game(4, 5, 'b');
 
 
 
