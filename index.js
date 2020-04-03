@@ -90,11 +90,9 @@ const Game = (move, player) => {
   } else {
     opponent = 'b';
   }
-
+  let piecesFlipped = false;
   const row = move.row;
   const col = move.col;
-
-  board[row][col] = player;
   
   console.log(board[row][col]);
   console.log('linebreak');
@@ -161,6 +159,9 @@ const Game = (move, player) => {
       direction.col = -1;
     }     
   //catch the error and tell the player if this move is not vaild, game is over, or whatever else
+  if(piecesFlipped) {
+    board[row][col] = player;
+  }
   console.log('linebreak');
   console.log(board);
 }
