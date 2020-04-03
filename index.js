@@ -66,7 +66,7 @@ const piecesToFlip = (startRow, startCol, direction) => {
     //if we see a blank space
     if(board[row][col] === ' ') {
       //dont record any positions
-      return;
+      return [];
     }
     //record the current position for our output
     flipPositions.push({
@@ -108,7 +108,6 @@ const Game = (move, player) => {
     row: 0,
     col: 0
   };
-  //try to place a piece on the board
     //if (0)west([row][col - 1]) adjacent is opposite color
     console.log(board[row][col - 1]);
     if(board[row][col - 1] === opponent) {
@@ -127,47 +126,106 @@ const Game = (move, player) => {
     if(board[row + 1][col - 1] === opponent) {
       direction.row = 1;
       direction.col = -1;
+      const flipped = piecesToFlip(row + 1, col - 1, direction);
+      console.log(flipped);
+      if(flipped.length) {
+        piecesFlipped = true;
+        for(let i = 0; i < flipped.length; i++) {
+          board[flipped[i].row][flipped[i].col] = player;
+        }
+      }
     }     
     //if (2)south([row + 1][col]) adjacent is opposite color
     if(board[row + 1][col] === opponent) {
       direction.row = 1;
       direction.col = 0;
+      const flipped = piecesToFlip(row + 1, col, direction);
+      console.log(flipped);
+      if(flipped.length) {
+        piecesFlipped = true;
+        for(let i = 0; i < flipped.length; i++) {
+          board[flipped[i].row][flipped[i].col] = player;
+        }
+      }
     }     
     //if (3)southeast([row + 1][col + 1]) adjacent is opposite color
     if(board[row + 1][col + 1] === opponent) {
       direction.row = 1;
       direction.col = 1;
+      const flipped = piecesToFlip(row + 1, col + 1, direction);
+      console.log(flipped);
+      if(flipped.length) {
+        piecesFlipped = true;
+        for(let i = 0; i < flipped.length; i++) {
+          board[flipped[i].row][flipped[i].col] = player;
+        }
+      }
     }     
     //if (4)east([row][col + 1]) adjacent is opposite color
     if(board[row][col + 1] === opponent) {
       direction.row = 0;
       direction.col = 1;
+      const flipped = piecesToFlip(row, col + 1, direction);
+      console.log(flipped);
+      if(flipped.length) {
+        piecesFlipped = true;
+        for(let i = 0; i < flipped.length; i++) {
+          board[flipped[i].row][flipped[i].col] = player;
+        }
+      }
     }     
     //if (5)northeast([row - 1][col + 1]) adjacent is opposite color
     if(board[row - 1][col] === opponent) {
       direction.row = -1;
       direction.col = 1;
+      const flipped = piecesToFlip(row - 1, col + 1, direction);
+      console.log(flipped);
+      if(flipped.length) {
+        piecesFlipped = true;
+        for(let i = 0; i < flipped.length; i++) {
+          board[flipped[i].row][flipped[i].col] = player;
+        }
+      }
     }     
     //if (6)north([row - 1][col]) adjacent is opposite color
     if(board[row][col-1] === opponent) {
       direction.row = -1;
       direction.col = 0;
+      const flipped = piecesToFlip(row - 1, col, direction);
+      console.log(flipped);
+      if(flipped.length) {
+        piecesFlipped = true;
+        for(let i = 0; i < flipped.length; i++) {
+          board[flipped[i].row][flipped[i].col] = player;
+        }
+      }
     }     
     //if (7)northwest([row - 1][col - 1]) adjacent is opposite color
     if(board[row - 1][col - 1] === opponent) {
       direction.row = -1;
       direction.col = -1;
+      const flipped = piecesToFlip(row - 1, col - 1, direction);
+      console.log(flipped);
+      if(flipped.length) {
+        piecesFlipped = true;
+        for(let i = 0; i < flipped.length; i++) {
+          board[flipped[i].row][flipped[i].col] = player;
+        }
+      }
     }     
-  //catch the error and tell the player if this move is not vaild, game is over, or whatever else
+
   if(piecesFlipped) {
     board[row][col] = player;
+  } else {
+    alert('invalid move, try again!');
   }
+
   console.log('linebreak');
   console.log(board);
 }
 
 //instantiate the first player's color
-let player = 'b';
+let player = 'w';
 
 //set the initial state of the logical board
 const board = [
@@ -183,7 +241,7 @@ const board = [
 
 //test move
 const theMove = {
-  row: 4,
+  row: 2,
   col: 5
 }
 
