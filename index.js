@@ -118,8 +118,11 @@ const Game = (move, player) => {
       direction.col = -1;
       const flipped = piecesToFlip(row, col - 1, direction);
       console.log(flipped);
-      for(let i = 0; i < flipped.length; i++) {
-        board[flipped[i].row][flipped[i].col] = player;
+      if(flipped.length) {
+        piecesFlipped = true;
+        for(let i = 0; i < flipped.length; i++) {
+          board[flipped[i].row][flipped[i].col] = player;
+        }
       }
     }     
     //if (1)southwest([row + 1][col - 1]) adjacent is opposite color
