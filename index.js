@@ -1,247 +1,171 @@
-/** 
- * Renders the current board state to the users viewport
-*/
-const drawBoard = board => {
-  //select the board
-  const $board = $('#board');
-  //for each row of the board
-  for(let row = 0; row < board.length; row++) {
-    //instantiate $row 
-    const $row = $('<div></div>').addClass('row');
-    //for each space in this row
-    for(let col = 0; col < board.length; col++) {
-      //instantiate square
-      const $square = $('<div></div>').addClass('square');
-      
-      //set index for each square row
-      $square.attr('data-row', row);
-      //set index for each square column
-      $square.attr('data-col', col);
-
-      //instantiate placement
-      const $placement = $('<div></div>').addClass('placement');
-
-      //add $square to $row
-      $row.append($square);
-    }
-  //add this row to the board
-  $board.append($row);
-  }
-}
-
-//DELCOM refactor this method to be based on the board array
-const discPlacement = player => {
-  //if the user clicks on a square
-  $('.square').click(function(){
-    //if this is an open space 
-    //DELCOM maybe instead of checking the color we should check the logical state?
-    if($(this).children().css('background-color') === 'rgb(0, 128, 0)') {
-      //if the current player is black
-      if(player === 'black') {
-        //draw black disk in this space
-        $(this).children().toggleClass('black');
-        //increase disc counter by 1
-        discCounter++;
-        //change player
-        player = 'white';
-      } else {
-        //draw white disk in this space
-        $(this).children().toggleClass('white');
-        //change player
-        player = 'black';
-        //increase disc counter by 1
-        discCounter++;
-      }
-    }
-  });
-}
-
-const piecesToFlip = (startRow, startCol, direction, player) => {
+const piecesToFlip = (startRow, startCol, vertical, horizontal, player) => {
+  
   //instantiate flipPositions
   const flipPositions = [];
+
+  //instantiate local storage for passed in values
   let row = startRow;
   let col = startCol;
+  const rowPositionTranslate = vertical;
+  const colPositionTranslate = horizontal;
+
   //while we have not seen the players color
   while(board[row][col] !== player) {
-    //if we see a blank space
-    if(board[row][col] === ' ') {
-      //dont record any positions
-      return [];
+    
+    //if we see the oponenets piece
+    if(board[row][col] === opponent) {
+      //record the current position for our output
+      flipPositions.push({
+        row: row,
+        col: col
+      });
     }
-    //record the current position for our output
-    flipPositions.push({
-      row: row,
-      col: col
-    });
-    row += direction.row; 
-    col += direction.col;
+   
+    //update the position we are checking
+    row += rowPositionTranslate; 
+    col += colPositionTranslate;
+
   }
 
-  return flipPositions;
+  //flip pieces
+  for(let i = 0; i < flipPositions.length; i++) {
+    board[flipPositions[i].row][flipPositions[i].col] = player;
+  }
+
+  //return the positions of the pieces we need to flip in the passed in direction
+  return flipPositions.length;
 }
 
-/**
- * Initializes the initial state of the game and renders the board based on that state
- */
-const Game = (moveRow, moveCol, player) => {
+//Process the current players move
+const processMove = (moveRow, moveCol, player) => {
 
-  if(player === 'b') {
-    opponent = 'w';
-  } else {
-    opponent = 'b';
-  }
-
+  //instantiate flag for whether or not pieces have been flipped
   let piecesFlipped = false;
+
+  //instantiate local storage for the players chose row and column
   const row = moveRow;
   const col = moveCol;
-  
-  console.log(board[row][col]);
-  console.log('linebreak');
-  console.log('the current player is ' + player);
-  console.log('linebreak');
-  console.log('the opposing player is currently ' + opponent);
-      // console.log(piecesToFlip(row, col - 1, direction));
 
-  // DELCOM we should find a way simply pass the valid directions
-  // to a single valid move  html
+  //instantiate vertical and horizontal translation
+  let vertical = 0;
+  let horizontal = 0;
 
-  const direction = {
-    row: 0,
-    col: 0
-  };
-    //if (0)west([row][col - 1]) adjacent is opposite color
-    console.log(board[row][col - 1]);
-    if(board[row][col - 1] === opponent) {
-      direction.row = 0;
-      direction.col = -1;
-      const flipped = piecesToFlip(row, col - 1, direction, player);
-      console.log(flipped);
-      if(flipped.length) {
-        piecesFlipped = true;
-        for(let i = 0; i < flipped.length; i++) {
-          board[flipped[i].row][flipped[i].col] = player;
-        }
-      }
-    }     
-    //if (1)southwest([row + 1][col - 1]) adjacent is opposite color
-    if(board[row + 1][col - 1] === opponent) {
-      direction.row = 1;
-      direction.col = -1;
-      const flipped = piecesToFlip(row + 1, col - 1, direction, player);
-      console.log(flipped);
-      if(flipped.length) {
-        piecesFlipped = true;
-        for(let i = 0; i < flipped.length; i++) {
-          board[flipped[i].row][flipped[i].col] = player;
-        }
-      }
-    }     
-    //if (2)south([row + 1][col]) adjacent is opposite color
-    if(board[row + 1][col] === opponent) {
-      direction.row = 1;
-      direction.col = 0;
-      const flipped = piecesToFlip(row + 1, col, direction, player);
-      console.log(flipped);
-      if(flipped.length) {
-        piecesFlipped = true;
-        for(let i = 0; i < flipped.length; i++) {
-          board[flipped[i].row][flipped[i].col] = player;
-        }
-      }
-    }     
-    //if (3)southeast([row + 1][col + 1]) adjacent is opposite color
-    if(board[row + 1][col + 1] === opponent) {
-      direction.row = 1;
-      direction.col = 1;
-      const flipped = piecesToFlip(row + 1, col + 1, direction, player);
-      console.log(flipped);
-      if(flipped.length) {
-        piecesFlipped = true;
-        for(let i = 0; i < flipped.length; i++) {
-          board[flipped[i].row][flipped[i].col] = player;
-        }
-      }
-    }     
-    //if (4)east([row][col + 1]) adjacent is opposite color
-    if(board[row][col + 1] === opponent) {
-      direction.row = 0;
-      direction.col = 1;
-      const flipped = piecesToFlip(row, col + 1, direction, player);
-      console.log(flipped);
-      if(flipped.length) {
-        piecesFlipped = true;
-        for(let i = 0; i < flipped.length; i++) {
-          board[flipped[i].row][flipped[i].col] = player;
-        }
-      }
-    }     
-    //if (5)northeast([row - 1][col + 1]) adjacent is opposite color
-    if(board[row - 1][col] === opponent) {
-      direction.row = -1;
-      direction.col = 1;
-      const flipped = piecesToFlip(row - 1, col + 1, direction, player);
-      console.log(flipped);
-      if(flipped.length) {
-        piecesFlipped = true;
-        for(let i = 0; i < flipped.length; i++) {
-          board[flipped[i].row][flipped[i].col] = player;
-        }
-      }
-    }     
-    //if (6)north([row - 1][col]) adjacent is opposite color
-    if(board[row][col-1] === opponent) {
-      direction.row = -1;
-      direction.col = 0;
-      const flipped = piecesToFlip(row - 1, col, direction, player);
-      console.log(flipped);
-      if(flipped.length) {
-        piecesFlipped = true;
-        for(let i = 0; i < flipped.length; i++) {
-          board[flipped[i].row][flipped[i].col] = player;
-        }
-      }
-    }     
-    //if (7)northwest([row - 1][col - 1]) adjacent is opposite color
-    if(board[row - 1][col - 1] === opponent) {
-      direction.row = -1;
-      direction.col = -1;
-      const flipped = piecesToFlip(row - 1, col - 1, direction, player);
-      console.log(flipped);
-      if(flipped.length) {
-        piecesFlipped = true;
-        for(let i = 0; i < flipped.length; i++) {
-          board[flipped[i].row][flipped[i].col] = player;
-        }
-      }
-    }     
+  //if (0)west([row][col - 1]) adjacent is opposite color
+  if(board[row][col - 1] === opponent) {
+    vertical = 0;
+    horizontal = -1;
+    const flipped = piecesToFlip(row, col - 1, vertical, horizontal, player);
+    if(flipped > 0) {
+      piecesFlipped = true;
+    }
+  }     
 
+  //if (1)southwest([row + 1][col - 1]) adjacent is opposite color
+  if(board[row + 1][col - 1] === opponent) {
+    vertical = 1;
+    horizontal = -1;
+    const flipped = piecesToFlip(row + 1, col - 1, vertical, horizontal, player);
+    if(flipped > 0) {
+      piecesFlipped = true;
+    }
+  }    
+
+  //if (2)south([row + 1][col]) adjacent is opposite color
+  if(board[row + 1][col] === opponent) {
+    vertical = 1;
+    horizontal = 0;
+    const flipped = piecesToFlip(row + 1, col, vertical, horizontal, player);
+    if(flipped > 0) {
+      piecesFlipped = true;
+    }
+  }     
+
+  //if (3)southeast([row + 1][col + 1]) adjacent is opposite color
+  if(board[row + 1][col + 1] === opponent) {
+    vertical = 1;
+    horizontal = 1;
+    const flipped = piecesToFlip(row + 1, col + 1, vertical, horizontal, player);
+    if(flipped > 0) {
+      piecesFlipped = true;
+    }
+  }    
+
+  //if (4)east([row][col + 1]) adjacent is opposite color
+  if(board[row][col + 1] === opponent) {
+    vertical = 0;
+    horizontal = 1;
+    const flipped = piecesToFlip(row, col + 1, vertical, horizontal, player);
+    if(flipped > 0) {
+      piecesFlipped = true;
+    }
+  }     
+  //if (5)northeast([row - 1][col + 1]) adjacent is opposite color
+  if(board[row - 1][col] === opponent) {
+    vertical = -1;
+    horizontal = 1;
+    const flipped = piecesToFlip(row - 1, col + 1, vertical, horizontal, player);
+    if(flipped > 0) {
+      piecesFlipped = true;
+    }
+  }     
+
+  //if (6)north([row - 1][col]) adjacent is opposite color
+  if(board[row][col-1] === opponent) {
+    vertical = -1;
+    horizontal = 0;
+    const flipped = piecesToFlip(row - 1, col, vertical, horizontal, player);
+    if(flipped > 0) {
+      piecesFlipped = true;
+    }
+  }     
+
+  //if (7)northwest([row - 1][col - 1]) adjacent is opposite color
+  if(board[row - 1][col - 1] === opponent) {
+    vertical = -1;
+    horizontal = -1;
+    const flipped = piecesToFlip(row - 1, col - 1, vertical, horizontal, player);
+    if(flipped > 0) {
+      piecesFlipped = true;
+    }
+  }     
+
+  //if any pieces were flipped
   if(piecesFlipped) {
+    //this move is valid and the piece can be placed where the player has chosen
     board[row][col] = player;
+    //change players
     currentPlayer = opponent;
+  //if no pieces were flipped
   } else {
+    //let the user know they need to make a new selection
     alert('invalid move, try again!');
   }
 
-  console.log('linebreak');
-  console.log(board);
 }
 
-//instantiate the first player's color
-let currentPlayer = 'b';
+//instantiate the first player's color, black is 0 and white is 1
+let currentPlayer = 0;
+
+//if the current player is black the opponent is white and vice versa
+let opponent = (currentPlayer === 0) ? 1 : 0;
 
 //set the initial state of the logical board
 const board = [
-  [' ',' ',' ',' ',' ',' ',' ',' '],
-  [' ',' ',' ',' ',' ',' ',' ',' '],
-  [' ',' ',' ',' ',' ',' ',' ',' '],
-  [' ',' ',' ','w','b',' ',' ',' '],
-  [' ',' ',' ','b','w',' ',' ',' '],
-  [' ',' ',' ',' ',' ',' ',' ',' '],
-  [' ',' ',' ',' ',' ',' ',' ',' '],
-  [' ',' ',' ',' ',' ',' ',' ',' '],    
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,1,0,null,null,null],
+  [null,null,null,0,1,null,null,null],
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null],    
 ];
 
-Game(4, 5, 'b');
+//test cases
+//TODO find out why this move is in valid, it is a south 
+processMove(4, 5, currentPlayer);
+console.log(board);
+
 
 
 
