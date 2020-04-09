@@ -98,15 +98,8 @@ const piecesToFlip = (startRow, startCol, vertical, horizontal, player, board) =
 
 }
 
-// $('.form-example').submit(function (e) { 
-//   e.preventDefault();
-  
-// });
-
-
-// console.log(board);
-// processMove(4, 5, currentPlayer, board);
-// processMove(3, 5, currentPlayer, board);
-// processMove(2, 4, currentPlayer, board);
-// processMove(5, 5, currentPlayer, board);
-
+console.log(board);
+processMove(4, 5, currentPlayer, board);
+processMove(3, 5, currentPlayer, board);
+processMove(2, 4, currentPlayer, board);
+processMove(5, 5, currentPlayer, board);
