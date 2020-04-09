@@ -53,6 +53,7 @@ const processMove = (moveRow, moveCol, player, board) => {
     //let the user know they need to make a new selection
     console.log('invalid move, try again');
   }
+  console.log(board);
 }
 
 const piecesToFlip = (startRow, startCol, vertical, horizontal, player, board) => {
@@ -103,3 +104,5 @@ processMove(4, 5, currentPlayer, board);
 processMove(3, 5, currentPlayer, board);
 processMove(2, 4, currentPlayer, board);
 processMove(5, 5, currentPlayer, board);
+processMove(4, 6, currentPlayer, board);
+processMove(3, 6, currentPlayer, board);
