@@ -1,0 +1,23 @@
+{
+  "name": "othello",
+  "version": "1.0.0",
+  "description": "Othello game implemented by Paul Jerome",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulthomasjerome/Othello.git"
+  },
+  "keywords": [
+    "othello",
+    "game"
+  ],
+  "author": "Paul Jerome",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paulthomasjerome/Othello/issues"
+  },
+  "homepage": "https://github.com/paulthomasjerome/Othello#readme"
+}

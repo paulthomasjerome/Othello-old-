@@ -1,5 +1,62 @@
-const piecesToFlip = (startRow, startCol, vertical, horizontal, player) => {
-  
+//instantiate the first player's color, black is 0 and white is 1
+let currentPlayer = 0;
+
+//if the current player is black the opponent is white and vice versa
+let opponent = (currentPlayer === 0) ? 1 : 0;
+
+//set the initial state of the logical board
+const board = [
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,   1,   0,null,null,null],
+  [null,null,null,   0,   1,null,null,null],
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null],
+  [null,null,null,null,null,null,null,null],    
+];
+
+//Process the current players move
+const processMove = (moveRow, moveCol, player, board) => {
+
+  //instantiate flag for whether or not pieces have been flipped
+  let piecesFlipped = false;
+
+  //DELCOM temp counter for direction loops
+  let logcount = 1;
+ 
+  let flipped = 0;
+
+  //check all directions
+  for(let vertical = -1; vertical <= 1; vertical++) {
+    for(let horizontal = -1; horizontal <= 1; horizontal++) {
+      
+      if(board[moveRow + vertical][moveCol + horizontal] === opponent) {
+        console.log('call to pieces flipped at iteration ' + logcount);
+
+        flipped = piecesToFlip(moveRow + vertical, moveCol + horizontal, vertical, horizontal, player, board);
+      }
+      if(flipped) piecesFlipped = true;
+      logcount++;
+    }
+  }
+
+  //if pieces were flipped
+  if(piecesFlipped) {
+    //this move is valid and the piece can be placed where the player has chosen
+    board[moveRow][moveCol] = currentPlayer;
+    //change players
+    currentPlayer = opponent;
+    opponent = (currentPlayer === 0) ? 1 : 0;
+  //if no pieces were flipped
+  } else {
+    //let the user know they need to make a new selection
+    console.log('invalid move, try again');
+  }
+}
+
+const piecesToFlip = (startRow, startCol, vertical, horizontal, player, board) => {
+
   //instantiate flipPositions
   const flipPositions = [];
 
@@ -25,6 +82,10 @@ const piecesToFlip = (startRow, startCol, vertical, horizontal, player) => {
     row += rowPositionTranslate; 
     col += colPositionTranslate;
 
+    if(board[row][col] === null) {
+      return false;
+    }
+
   }
 
   //flip pieces
@@ -32,140 +93,20 @@ const piecesToFlip = (startRow, startCol, vertical, horizontal, player) => {
     board[flipPositions[i].row][flipPositions[i].col] = player;
   }
 
-  //return the positions of the pieces we need to flip in the passed in direction
-  return flipPositions.length;
-}
-
-//Process the current players move
-const processMove = (moveRow, moveCol, player) => {
-
-  //instantiate flag for whether or not pieces have been flipped
-  let piecesFlipped = false;
-
-  //instantiate local storage for the players chose row and column
-  const row = moveRow;
-  const col = moveCol;
-
-  //instantiate vertical and horizontal translation
-  let vertical = 0;
-  let horizontal = 0;
-
-  //if (0)west([row][col - 1]) adjacent is opposite color
-  if(board[row][col - 1] === opponent) {
-    vertical = 0;
-    horizontal = -1;
-    const flipped = piecesToFlip(row, col - 1, vertical, horizontal, player);
-    if(flipped > 0) {
-      piecesFlipped = true;
-    }
-  }     
-
-  //if (1)southwest([row + 1][col - 1]) adjacent is opposite color
-  if(board[row + 1][col - 1] === opponent) {
-    vertical = 1;
-    horizontal = -1;
-    const flipped = piecesToFlip(row + 1, col - 1, vertical, horizontal, player);
-    if(flipped > 0) {
-      piecesFlipped = true;
-    }
-  }    
-
-  //if (2)south([row + 1][col]) adjacent is opposite color
-  if(board[row + 1][col] === opponent) {
-    vertical = 1;
-    horizontal = 0;
-    const flipped = piecesToFlip(row + 1, col, vertical, horizontal, player);
-    if(flipped > 0) {
-      piecesFlipped = true;
-    }
-  }     
-
-  //if (3)southeast([row + 1][col + 1]) adjacent is opposite color
-  if(board[row + 1][col + 1] === opponent) {
-    vertical = 1;
-    horizontal = 1;
-    const flipped = piecesToFlip(row + 1, col + 1, vertical, horizontal, player);
-    if(flipped > 0) {
-      piecesFlipped = true;
-    }
-  }    
-
-  //if (4)east([row][col + 1]) adjacent is opposite color
-  if(board[row][col + 1] === opponent) {
-    vertical = 0;
-    horizontal = 1;
-    const flipped = piecesToFlip(row, col + 1, vertical, horizontal, player);
-    if(flipped > 0) {
-      piecesFlipped = true;
-    }
-  }     
-  //if (5)northeast([row - 1][col + 1]) adjacent is opposite color
-  if(board[row - 1][col] === opponent) {
-    vertical = -1;
-    horizontal = 1;
-    const flipped = piecesToFlip(row - 1, col + 1, vertical, horizontal, player);
-    if(flipped > 0) {
-      piecesFlipped = true;
-    }
-  }     
-
-  //if (6)north([row - 1][col]) adjacent is opposite color
-  if(board[row][col-1] === opponent) {
-    vertical = -1;
-    horizontal = 0;
-    const flipped = piecesToFlip(row - 1, col, vertical, horizontal, player);
-    if(flipped > 0) {
-      piecesFlipped = true;
-    }
-  }     
-
-  //if (7)northwest([row - 1][col - 1]) adjacent is opposite color
-  if(board[row - 1][col - 1] === opponent) {
-    vertical = -1;
-    horizontal = -1;
-    const flipped = piecesToFlip(row - 1, col - 1, vertical, horizontal, player);
-    if(flipped > 0) {
-      piecesFlipped = true;
-    }
-  }     
-
-  //if any pieces were flipped
-  if(piecesFlipped) {
-    //this move is valid and the piece can be placed where the player has chosen
-    board[row][col] = player;
-    //change players
-    currentPlayer = opponent;
-  //if no pieces were flipped
-  } else {
-    //let the user know they need to make a new selection
-    alert('invalid move, try again!');
-  }
+  //return the number of pieces flipped
+  return true;
 
 }
 
-//instantiate the first player's color, black is 0 and white is 1
-let currentPlayer = 0;
-
-//if the current player is black the opponent is white and vice versa
-let opponent = (currentPlayer === 0) ? 1 : 0;
-
-//set the initial state of the logical board
-const board = [
-  [null,null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null,null],
-  [null,null,null,1,0,null,null,null],
-  [null,null,null,0,1,null,null,null],
-  [null,null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null,null],    
-];
-
-//test cases
-//TODO find out why this move is in valid, it is a south 
-processMove(4, 5, currentPlayer);
-console.log(board);
+// $('.form-example').submit(function (e) { 
+//   e.preventDefault();
+  
+// });
 
 
-
+// console.log(board);
+// processMove(4, 5, currentPlayer, board);
+// processMove(3, 5, currentPlayer, board);
+// processMove(2, 4, currentPlayer, board);
+// processMove(5, 5, currentPlayer, board);
 
