@@ -19,7 +19,7 @@ const board = [
  * the move is indeed valid, it will implement that move
  * 
  * @param {number} moveRow the row position of the space chosen by the current player
- * @param {number} moveCol the collumn position of the space chosen by the current player
+ * @param {number} moveCol the column position of the space chosen by the current player
  * @param {number} player the current player
  * @param {array[][]} board the current board state
  */
@@ -37,9 +37,7 @@ const processMove = (moveRow, moveCol, player, board) => {
       //if the adjacent piece is the opponents piece
       if (board[moveRow + vertical][moveCol + horizontal] === opponent) {
         //flip the pieces and record whether or not pieces were flipped
-        validMove = flipPieces (
-          moveRow + vertical, moveCol + horizontal, vertical, horizontal, player, opponent, board
-        );
+        validMove = flipPieces (moveRow, moveCol, vertical, horizontal, player, opponent, board);
       }
       //we find any valid flips
       if (validMove) {
@@ -66,13 +64,18 @@ const processMove = (moveRow, moveCol, player, board) => {
  * The purpose of this function is flip pieces on the board if possible and inform the client
  * or user that the pieces were flipped
  * 
- * @param {number} startRow 
- * @param {number} startCol 
- * @param {number} vertical 
- * @param {number} horizontal 
- * @param {number} player 
+ * It starts at the position the player places at, then moves out in one direction looking for:
+ *  - The current players piece, in which place is stops looking
+ *  - The opponents piece, in which case it records it to flip if it's a valid move
+ *  - A blank space/the edge of the board, in which case it also stops looking
+ * 
+ * @param {number} startRow
+ * @param {number} startCol
+ * @param {number} vertical
+ * @param {number} horizontal
+ * @param {number} player
  * @param {number} opponent 
- * @param {array[][]} board 
+ * @param {array[][]} board
  * 
  * @return {boolean} Return true if pieces are flipped and false otherwise
  */
@@ -82,13 +85,13 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, 
   const flipPositions = [];
 
   //instantiate local storage for passed in values
-  let row = startRow;
-  let col = startCol;
+  let row = startRow + vertical;
+  let col = startCol + horizontal;
 
   //while we have not seen the players color
   while (board[row][col] !== player) {
 
-    //if we see the oponenets piece
+    //if we see the opponents piece
     if (board[row][col] === opponent) {
       //record the current position for our output
       flipPositions.push({
@@ -101,7 +104,7 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, 
     row += vertical;
     col += horizontal;
 
-    //if we have not seen the opponents piece before we see a black space
+    //if we have not seen the opponents piece before we see a blank space
     if (board[row][col] === null) {
       //we cannot flip pieces in the passed in direction
       return false;
