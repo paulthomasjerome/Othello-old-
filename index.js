@@ -1,118 +1,82 @@
 //instantiate the first player's color, black is 0 and white is 1
 let currentPlayer = 0;
 
-//if the current player is black the opponent is white and vice versa
-let opponent = (currentPlayer === 0) ? 1 : 0;
-
 //set the initial state of the logical board
 const board = [
   [null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null],
-  [null, null, null, 0, 1, null, null, null],
-  [null, null, null, 1, 0, null, null, null],
+  [null, null, null,    0,    1, null, null, null],
+  [null, null, null,    1,    0, null, null, null],
   [null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null],
 ];
 
-//UI METHODS
-const paint = (board) => {
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board.length; col++) {
-      if (board[row][col] === 0) {
-        $('.square[data-row=' + row + '][data-col=' + col + ']').children().css('background-color', 'black');
-      } else if (board[row][col] === 1) {
-        $('.square[data-row=' + row + '][data-col=' + col + ']').children().css('background-color', 'white');
-      }
-    }
-  }
-}
 
-const initializeBoard = board => {
-  //select the board
-  const $board = $('#board');
-  //for each row of the board
-  for (let row = 0; row < board.length; row++) {
-    //instantiate $row 
-    const $row = $('<div></div>').addClass('row');
-    //for each space in this row
-    for (let col = 0; col < board.length; col++) {
-      //instantiate square
-      const $square = $('<div></div>').addClass('square');
-
-      //set index for each square row
-      $square.attr('data-row', row);
-      //set index for each square column
-      $square.attr('data-col', col);
-
-      //instantiate placement
-      const $placement = $('<div></div>').addClass('placement');
-
-      $square.append($placement);
-
-      //add $square to $row
-      $row.append($square);
-    }
-    //add this row to the board
-    $board.append($row);
-  }
-  paint(board);
-}
-
-const getInput = () => {
-  const $row = 0;
-  const $col = 0;
-  let theMove = {};
-
-  $('.square').click(function () {
-    $row = $(this).attr('data-row');
-    $col = $(this).attr('data-col');
-    theMove.row = $row;
-    theMove.col = $col;
-  });
-
-  return theMove;
-}
-
-//LOGICAL METHODS
-
-//Process the current players move
+/**
+ * The purpose of this function is to determine if the player has made a valid move, and if 
+ * the move is indeed valid, it will implement that move
+ * 
+ * @param {number} moveRow the row position of the space chosen by the current player
+ * @param {number} moveCol the collumn position of the space chosen by the current player
+ * @param {number} player the current player
+ * @param {array[][]} board the current board state
+ */
 const processMove = (moveRow, moveCol, player, board) => {
-
+  let opponent = (currentPlayer === 0) ? 1 : 0;
   //instantiate flag for whether or not pieces have been flipped
   let piecesFlipped = false;
 
-  let validFlip = false;
+  //initialize flag to track if we have made a valid move
+  let validMove = false;
 
   //check all directions
   for (let vertical = -1; vertical <= 1; vertical++) {
     for (let horizontal = -1; horizontal <= 1; horizontal++) {
-
+      //if the adjacent piece is the opponents piece
       if (board[moveRow + vertical][moveCol + horizontal] === opponent) {
-        validFlip = flipPieces(moveRow + vertical, moveCol + horizontal, vertical, horizontal, player, board);
+        //flip the pieces and record whether or not pieces were flipped
+        validMove = flipPieces (
+          moveRow + vertical, moveCol + horizontal, vertical, horizontal, player, opponent, board
+        );
       }
-      if (validFlip) piecesFlipped = true;
+      //we find any valid flips
+      if (validMove) {
+        //record that pieces are flipped indicating this is a valid move
+        piecesFlipped = true;
+      }
     }
   }
 
   //if pieces were flipped
   if (piecesFlipped) {
     //this move is valid and the piece can be placed where the player has chosen
-    board[moveRow][moveCol] = currentPlayer;
-    //change players
+    board[moveRow][moveCol] = player;
+    //switch players
     currentPlayer = opponent;
-    opponent = (currentPlayer === 0) ? 1 : 0;
     //if no pieces were flipped
   } else {
     //let the user know they need to make a new selection
     console.log('invalid move, try again');
   }
-  console.log(board);
-  paint(board);
 }
 
-const flipPieces = (startRow, startCol, vertical, horizontal, player, board) => {
+/**
+ * The purpose of this function is flip pieces on the board if possible and inform the client
+ * or user that the pieces were flipped
+ * 
+ * @param {number} startRow 
+ * @param {number} startCol 
+ * @param {number} vertical 
+ * @param {number} horizontal 
+ * @param {number} player 
+ * @param {number} opponent 
+ * @param {array[][]} board 
+ * 
+ * @return {boolean} Return true if pieces are flipped and false otherwise
+ */
+const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, board) => {
 
   //instantiate flipPositions
   const flipPositions = [];
@@ -120,8 +84,6 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, board) => 
   //instantiate local storage for passed in values
   let row = startRow;
   let col = startCol;
-  const rowPositionTranslate = vertical;
-  const colPositionTranslate = horizontal;
 
   //while we have not seen the players color
   while (board[row][col] !== player) {
@@ -136,30 +98,27 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, board) => 
     }
 
     //update the position we are checking
-    row += rowPositionTranslate;
-    col += colPositionTranslate;
+    row += vertical;
+    col += horizontal;
 
+    //if we have not seen the opponents piece before we see a black space
     if (board[row][col] === null) {
+      //we cannot flip pieces in the passed in direction
       return false;
     }
 
   }
 
-  //flip pieces
+  //for each of the positions we need to flip at
   for (let i = 0; i < flipPositions.length; i++) {
+    //flip the pieces to the current players color
     board[flipPositions[i].row][flipPositions[i].col] = player;
   }
 
-  //return the number of pieces flipped
+  //return that pieces were flipped
   return true;
 
 }
 
-initializeBoard(board);
-
-// console.log(board);
-// processMove(3, 5, currentPlayer, board);
-// paint(board);
-
-
-
+// module.exports = processMove;
+module.exports = flipPieces;
