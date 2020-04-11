@@ -4,7 +4,9 @@
   "description": "Othello game implemented by Paul Jerome",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --collectCoverage",
+    "watch": "jest --watch"
   },
   "repository": {
     "type": "git",
