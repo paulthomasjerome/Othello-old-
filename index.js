@@ -69,13 +69,13 @@ const processMove = (moveRow, moveCol, player, board) => {
  *  - The opponents piece, in which case it records it to flip if it's a valid move
  *  - A blank space/the edge of the board, in which case it also stops looking
  * 
- * @param {number} startRow
- * @param {number} startCol
- * @param {number} vertical
- * @param {number} horizontal
- * @param {number} player
- * @param {number} opponent 
- * @param {array[][]} board
+ * @param {number} startRow the row index of the first position to check for an opponents piece
+ * @param {number} startCol the column index of the first position to check for the players piece
+ * @param {number} vertical helper to translate the row index when checking for the players piece
+ * @param {number} horizontal helper to translate the column index when checking for the players piece
+ * @param {number} player the current player
+ * @param {number} opponent the current opponent
+ * @param {array[][]} board the current board state
  * 
  * @return {boolean} Return true if pieces are flipped and false otherwise
  */
@@ -84,12 +84,18 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, 
   //instantiate flipPositions
   const flipPositions = [];
 
-  //instantiate local storage for passed in values
+  //store the first space we need to check in the "passed in" direction (i.e. vertical/horizontal)
   let row = startRow + vertical;
   let col = startCol + horizontal;
 
   //while we have not seen the players color
   while (board[row][col] !== player) {
+
+    //if we have not seen the opponents piece before we see a blank space
+    if (board[row][col] === null) {
+      //we cannot flip pieces in the passed in direction
+      return false;
+    }
 
     //if we see the opponents piece
     if (board[row][col] === opponent) {
@@ -104,11 +110,7 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, 
     row += vertical;
     col += horizontal;
 
-    //if we have not seen the opponents piece before we see a blank space
-    if (board[row][col] === null) {
-      //we cannot flip pieces in the passed in direction
-      return false;
-    }
+
 
   }
 
