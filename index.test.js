@@ -87,7 +87,232 @@ describe('flipPieces', () => {
     expect(board).toEqual(boardAfter);
   });
   
-  // Either duplicate for each direction or iteratively test in here
+  //it should not flip pieces if it encounters its own piece first
+  
+  it('Should not flip pieces from north to south if it encounters player piece before opponent', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    0,    0, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
+      [null, null, null, null,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    0,    0, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
+      [null, null, null, null,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(2, 4, 1, 0, 0, 1, board);
+
+    expect(piecesFlipped).toBe(false);
+    expect(board).toEqual(boardAfter);
+  });
+  
+  it('Should not flip pieces from south to north if it encounters player piece before opponent', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null,    1, null, null, null],
+      [null, null, null,    0,    0, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null,    1, null, null, null],
+      [null, null, null,    0,    0, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(5, 4, -1, 0, 1, 0, board);
+
+    expect(piecesFlipped).toBe(false);
+    expect(board).toEqual(boardAfter);
+  });
+  
+  it('Should not flip pieces from west to east if it encounters player piece before opponent ', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    1,    0,    1, null, null],
+      [null, null, null,    1,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    1,    0,    1, null, null],
+      [null, null, null,    1,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(3, 2, 0, 1, 1, 0, board);
+
+    expect(piecesFlipped).toBe(false);
+    expect(board).toEqual(boardAfter);
+  });
+  
+  it('Should not flip pieces from east to west if it encounters player piece before opponent ', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null,    0,    1,    0, null, null, null],
+      [null, null, null,    1,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null,    0,    1,    0, null, null, null],
+      [null, null, null,    1,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(3, 5, 0, -1, 0, 1, board);
+
+    expect(piecesFlipped).toBe(false);
+    expect(board).toEqual(boardAfter);
+  });
+  
+  it('Should not flip pieces from northwest to southeast if it encounters player piece before opponent', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
+      [null, null, null,    1,    0, null, null, null],
+      [null, null, null, null, null,    1, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
+      [null, null, null,    1,    0, null, null, null],
+      [null, null, null, null, null,    1, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(2, 2, 1, 1, 1, 0, board);
+  
+    expect(piecesFlipped).toBe(false);
+    expect(board).toEqual(boardAfter);
+  });
+  
+  it('Should not flip pieces from southeast to northwest if it encounters player piece before opponent', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null,    1, null, null, null, null, null],
+      [null, null, null,    0,    1, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null,    1, null, null, null, null, null],
+      [null, null, null,    0,    1, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(5, 5, -1, -1, 1, 0, board);
+
+    expect(piecesFlipped).toBe(false);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should not flip pieces from northeast to southwest if it encounters player piece before opponent southwest', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    0,    0, null, null, null],
+      [null, null, null,    1,    0, null, null, null],
+      [null, null,    0, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    0,    0, null, null, null],
+      [null, null, null,    1,    0, null, null, null],
+      [null, null,    0, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(2, 5, 1, -1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(false);
+    expect(board).toEqual(boardAfter);
+  });
+  
+  it('Should not flip pieces from southwest to northeast if it encounters player piece before opponent', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null,    0, null, null],
+      [null, null, null,    0,    1, null, null, null],
+      [null, null, null,    0,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null,    0, null, null],
+      [null, null, null,    0,    1, null, null, null],
+      [null, null, null,    0,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const piecesFlipped = flipPieces(5, 2, -1, 1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(false);
+    expect(board).toEqual(boardAfter);
+  });
+
+  //it should flip pieces in each direction
   it('Should flip pieces from north to south', () => {
     const board = [
       [null, null, null, null, null, null, null, null],
@@ -102,7 +327,7 @@ describe('flipPieces', () => {
     const boardAfter = [
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
       [null, null, null,    0,    0, null, null, null],
       [null, null, null,    1,    0, null, null, null],
       [null, null, null, null, null, null, null, null],
@@ -133,7 +358,7 @@ describe('flipPieces', () => {
       [null, null, null, null, null, null, null, null],
       [null, null, null,    0,    1, null, null, null],
       [null, null, null,    1,    1, null, null, null],
-      [null, null, null, null,    1, null, null, null],
+      [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
     ];
@@ -159,7 +384,7 @@ describe('flipPieces', () => {
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null,    1,    1,    1, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
       [null, null, null,    1,    0, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
@@ -187,7 +412,7 @@ describe('flipPieces', () => {
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, null,    0,    0,    0, null, null],
+      [null, null, null,    0,    0, null, null, null],
       [null, null, null,    1,    0, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
@@ -214,7 +439,7 @@ describe('flipPieces', () => {
     const boardAfter = [
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null,    1, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
       [null, null, null,    1,    1, null, null, null],
       [null, null, null,    1,    1, null, null, null],
       [null, null, null, null, null, null, null, null],
@@ -245,7 +470,7 @@ describe('flipPieces', () => {
       [null, null, null, null, null, null, null, null],
       [null, null, null,    1,    1, null, null, null],
       [null, null, null,    1,    1, null, null, null],
-      [null, null, null, null, null,    1, null, null],
+      [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
     ];
@@ -270,7 +495,7 @@ describe('flipPieces', () => {
     const boardAfter = [
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
-      [null, null, null, null, null,    0, null, null],
+      [null, null, null, null, null, null, null, null],
       [null, null, null,    0,    0, null, null, null],
       [null, null, null,    0,    0, null, null, null],
       [null, null, null, null, null, null, null, null],
@@ -301,19 +526,17 @@ describe('flipPieces', () => {
       [null, null, null, null, null, null, null, null],
       [null, null, null,    0,    0, null, null, null],
       [null, null, null,    0,    0, null, null, null],
-      [null, null,    0, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
     ];
+
     const piecesFlipped = flipPieces(5, 2, -1, 1, 0, 1, board);
   
     expect(piecesFlipped).toBe(true);
     expect(board).toEqual(boardAfter);
   });
-  
-  it('Should not flip pieces in each direction if encounters own piece first', () => {
-  
-  });
+  //stop
   
   it('Should not flip pieces in each direction if encounters null first', () => {
   
@@ -329,7 +552,7 @@ describe('flipPieces', () => {
       [null, null, null, null, null, null, null, null],
       [null, null, null, null,    0, null, null, null],
       [null, null, null,    0,    1, null, null, null],
-      [null, null, null,    0,    1, null, null, null],
+      [null, null, null,    1,    1, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
@@ -340,7 +563,7 @@ describe('flipPieces', () => {
       [null, null, null, null,    0, null, null, null],
       [null, null, null,    0,    0, null, null, null],
       [null, null, null,    1,    0, null, null, null],
-      [null, null, null, null,    0, null, null, null],
+      [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
     ];
