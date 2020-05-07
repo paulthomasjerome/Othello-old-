@@ -754,14 +754,348 @@ describe('flipPieces', () => {
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
     ];
+
     const piecesFlipped = flipPieces(5, 2, -1, 1, 0, 1, board);
   
     expect(piecesFlipped).toBe(false);
     expect(board).toEqual(boardAfter);
   });
   
-  it('Should handle the edge of the board in each direction', () => {
+  it('Should handle the edge of the board at cartesian quadrant I from north to south', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null,    1],
+      [null, null, null, null, null, null, null,    0],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null,    0],
+      [null, null, null, null, null, null, null,    0],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(0, 7, 1, 0, 0, 1, board);
   
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at cartesian quadrant I from east to west', () => {
+    const board = [
+      [null, null, null, null, null,    0,    1, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null,    0,    0, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(0, 7, 0, -1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at cartesian quadrant I from northeast to southwest', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null,    1, null],
+      [null, null, null, null, null,    0, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null,    0, null],
+      [null, null, null, null, null,    0, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(0, 7, 1, -1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at cartesian quadrant II from north to south', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [   1, null, null, null, null, null, null, null],
+      [   0, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [   0, null, null, null, null, null, null, null],
+      [   0, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(0, 0, 1, 0, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  
+  });
+
+  it('Should handle the edge of the board at cartesian quadrant II from west to east', () => {
+    const board = [
+      [null,    1,    0, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null,    0,    0, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(0, 0, 0, 1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at cartesian quadrant II from northwest to southeast', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null,    1, null, null, null, null, null, null],
+      [null, null,    0, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null,    0, null, null, null, null, null, null],
+      [null, null,    0, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(0, 0, 1, 1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at quadrant III from south to north', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [   0, null, null, null, null, null, null, null],
+      [   1, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [   0, null, null, null, null, null, null, null],
+      [   0, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(7, 0, -1, 0, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at quadrant III from west to east', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null,    1,    0, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null,    0,    0, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(7, 0, 0, 1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at quadrant III from southwest to northeast', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null,    0, null, null, null, null, null],
+      [null,    1, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null,    0, null, null, null, null, null],
+      [null,    0, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(7, 0, -1, 1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at quadrant IV from south to north', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null,    0],
+      [null, null, null, null, null, null, null,    1],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null,    0],
+      [null, null, null, null, null, null, null,    0],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(7, 7, -1, 0, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at quadrant IV from east to west', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null,    0,    1, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null,    0,    0, null],
+    ];
+
+    const piecesFlipped = flipPieces(7, 7, 0, -1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
+  });
+
+  it('Should handle the edge of the board at quadrant IV from southeast to northwest', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null,    0, null, null],
+      [null, null, null, null, null, null,    1, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null,    0, null, null],
+      [null, null, null, null, null, null,    0, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const piecesFlipped = flipPieces(7, 7, -1, -1, 0, 1, board);
+  
+    expect(piecesFlipped).toBe(true);
+    expect(board).toEqual(boardAfter);
   });
   
   it('Should flip multiple pieces at once', () => {
