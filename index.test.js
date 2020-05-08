@@ -1,5 +1,6 @@
-const flipPieces = require('./index.js');
-// const proccessMove = require('./index.js');
+const gameLogic = require('./index.js');
+const flipPieces = gameLogic.flipPieces;
+const tryMove = gameLogic.processMove;
 
 describe('flipPieces', () => {
   it('Should flip pieces if there are pieces to flip', () => {
@@ -1125,5 +1126,34 @@ describe('flipPieces', () => {
     expect(piecesFlipped).toBe(true);
     expect(board).toEqual(boardAfter);
   
+  });
+});
+
+describe('processMove', () => {
+  it('Should flip pieces in all directions if possible', () => {
+    const board = [
+      [null, null, null, null, null, null, null, null],
+      [null,    0,    0,    0,    0,    0, null, null],
+      [null,    0,    1,    1,    1,    0, null, null],
+      [null,    0,    1, null,    1,    0, null, null],
+      [null,    0,    1,    1,    1,    0, null, null],
+      [null,    0,    0,    0,    0,    0, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null,    0,    0,    0,    0,    0, null, null],
+      [null,    0,    0,    0,    0,    0, null, null],
+      [null,    0,    0, null,    0,    0, null, null],
+      [null,    0,    0,    0,    0,    0, null, null],
+      [null,    0,    0,    0,    0,    0, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    const proccessMove = tryMove(3, 3, 0, board);
+  
+    expect(board).toEqual(boardAfter);
   });
 });

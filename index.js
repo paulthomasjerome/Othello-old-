@@ -26,6 +26,7 @@ const board = [
 const processMove = (moveRow, moveCol, player, board) => {
   //set the current opponent
   let opponent = (currentPlayer === 0) ? 1 : 0;
+  
   //instantiate flag for whether or not pieces have been flipped
   let piecesFlipped = false;
 
@@ -110,9 +111,6 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, 
     //update the position we are checking
     row += vertical;
     col += horizontal;
-
-
-
   }
 
   //for each of the positions we need to flip at
@@ -127,4 +125,5 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, 
 }
 
 // module.exports = processMove;
-module.exports = flipPieces;
+exports.flipPieces = flipPieces;
+exports.processMove = processMove;
