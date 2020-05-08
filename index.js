@@ -26,7 +26,7 @@ const board = [
 const processMove = (moveRow, moveCol, player, board) => {
   //set the current opponent
   let opponent = (currentPlayer === 0) ? 1 : 0;
-  
+
   //instantiate flag for whether or not pieces have been flipped
   let piecesFlipped = false;
 
@@ -36,15 +36,20 @@ const processMove = (moveRow, moveCol, player, board) => {
   //check all directions
   for (let vertical = -1; vertical <= 1; vertical++) {
     for (let horizontal = -1; horizontal <= 1; horizontal++) {
+
       //if the adjacent piece is the opponents piece
       if (board[moveRow + vertical][moveCol + horizontal] === opponent) {
+
         //flip the pieces and record whether or not pieces were flipped
         validMove = flipPieces (moveRow, moveCol, vertical, horizontal, player, opponent, board);
+
       }
       //we find any valid flips
       if (validMove) {
+
         //record that pieces are flipped indicating this is a valid move
         piecesFlipped = true;
+
       }
     }
   }
@@ -90,22 +95,30 @@ const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, 
   let row = startRow + vertical;
   let col = startCol + horizontal;
 
+  if(board[row][col] === player) {
+    return false;
+  }
+
   //while we have not seen the players color
   while (board[row][col] !== player) {
 
     //if we have not seen the opponents piece before we see a blank space
     if (board[row][col] === null) {
+
       //we cannot flip pieces in the passed in direction
       return false;
+
     }
 
     //if we see the opponents piece
     if (board[row][col] === opponent) {
+
       //record the current position for our output
       flipPositions.push({
         row: row,
         col: col
       });
+
     }
 
     //update the position we are checking
