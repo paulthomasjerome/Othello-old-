@@ -24,6 +24,7 @@ const board = [
  * @param {array[][]} board the current board state
  */
 const processMove = (moveRow, moveCol, player, board) => {
+  //set the current opponent
   let opponent = (currentPlayer === 0) ? 1 : 0;
   //instantiate flag for whether or not pieces have been flipped
   let piecesFlipped = false;

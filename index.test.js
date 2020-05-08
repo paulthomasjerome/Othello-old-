@@ -1126,34 +1126,4 @@ describe('flipPieces', () => {
     expect(board).toEqual(boardAfter);
   
   });
-  
-  //does not work as a test because flipPieces only checks the direction passed in
-  // it('Should flip multiple directions simultaneously', () => {
-  //   const board = [
-  //     [null, null, null, null, null, null, null, null],
-  //     [null, null, null, null, null, null, null, null],
-  //     [null, null, null, null, null, null, null, null],
-  //     [null, null, null,    0,    1, null, null, null],
-  //     [null, null, null,    1,    1, null, null, null],
-  //     [null, null, null,    0, null, null, null, null],
-  //     [null, null, null, null, null, null, null, null],
-  //     [null, null, null, null, null, null, null, null],
-  //   ];
-  //   const boardAfter = [
-  //     [null, null, null, null, null, null, null, null],
-  //     [null, null, null, null, null, null, null, null],
-  //     [null, null, null, null, null, null, null, null],
-  //     [null, null, null,    0,    0, null, null, null],
-  //     [null, null, null,    1,    0, null, null, null],
-  //     [null, null, null,    0, null, null, null, null],
-  //     [null, null, null, null, null, null, null, null],
-  //     [null, null, null, null, null, null, null, null],
-  //   ];
-
-  //   const piecesFlipped = flipPieces(3, 5, ?, ?, 0, 1, board);
-  
-  //   expect(piecesFlipped).toBe(true);
-  //   expect(board).toEqual(boardAfter);
-  
-  // });
 });
