@@ -1145,15 +1145,44 @@ describe('processMove', () => {
       [null, null, null, null, null, null, null, null],
       [null,    0,    0,    0,    0,    0, null, null],
       [null,    0,    0,    0,    0,    0, null, null],
-      [null,    0,    0, null,    0,    0, null, null],
+      [null,    0,    0,    0,    0,    0, null, null],
       [null,    0,    0,    0,    0,    0, null, null],
       [null,    0,    0,    0,    0,    0, null, null],
       [null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null],
     ];
 
-    const proccessMove = tryMove(3, 3, 0, board);
+    tryMove(3, 3, 0, board);
   
     expect(board).toEqual(boardAfter);
+  });
+
+  it('Should flip pieces north and south simultaneously', () => {
+    const board2 = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    0, null, null, null, null],
+      [null, null, null,    1, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    1, null, null, null, null],
+      [null, null, null,    0, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+    const boardAfter = [
+      [null, null, null, null, null, null, null, null],
+      [null, null, null,    0, null, null, null, null],
+      [null, null, null,    0, null, null, null, null],
+      [null, null, null,    0, null, null, null, null],
+      [null, null, null,    0, null, null, null, null],
+      [null, null, null,    0, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+    ];
+
+    tryMove(3, 3, 0, board2);
+    console.log(board2);
+    
+  
+    expect(board2).toEqual(boardAfter);
   });
 });

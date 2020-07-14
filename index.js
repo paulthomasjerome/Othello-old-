@@ -2,16 +2,16 @@
 let currentPlayer = 0;
 
 //set the initial state of the logical board
-const board = [
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null,    0,    1, null, null, null],
-  [null, null, null,    1,    0, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-];
+// const board = [
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null,    0,    1, null, null, null],
+//   [null, null, null,    1,    0, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+// ];
 
 
 /**
@@ -25,7 +25,7 @@ const board = [
  */
 const processMove = (moveRow, moveCol, player, board) => {
   //set the current opponent
-  let opponent = (currentPlayer === 0) ? 1 : 0;
+  let opponent = (player === 0) ? 1 : 0;
 
   //instantiate flag for whether or not pieces have been flipped
   let piecesFlipped = false;
@@ -37,13 +37,9 @@ const processMove = (moveRow, moveCol, player, board) => {
   for (let vertical = -1; vertical <= 1; vertical++) {
     for (let horizontal = -1; horizontal <= 1; horizontal++) {
 
-      //if the adjacent piece is the opponents piece
-      if (board[moveRow + vertical][moveCol + horizontal] === opponent) {
+      //flip the pieces and record whether or not pieces were flipped
+      validMove = flipPieces (moveRow, moveCol, vertical, horizontal, player, opponent, board);
 
-        //flip the pieces and record whether or not pieces were flipped
-        validMove = flipPieces (moveRow, moveCol, vertical, horizontal, player, opponent, board);
-
-      }
       //we find any valid flips
       if (validMove) {
 
@@ -60,7 +56,7 @@ const processMove = (moveRow, moveCol, player, board) => {
     board[moveRow][moveCol] = player;
     //switch players
     currentPlayer = opponent;
-    //if no pieces were flipped
+  //if no pieces were flipped
   } else {
     //let the user know they need to make a new selection
     console.log('invalid move, try again');
