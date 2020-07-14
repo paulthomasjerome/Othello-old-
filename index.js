@@ -1,118 +1,138 @@
-//instantiate the first player's color
-let player = 'black';
+//instantiate the first player's color, black is 0 and white is 1
+let currentPlayer = 0;
 
-//instantiate counter for filled spaces
-let discCounter = 4;
+//set the initial state of the logical board
+// const board = [
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null,    0,    1, null, null, null],
+//   [null, null, null,    1,    0, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+//   [null, null, null, null, null, null, null, null],
+// ];
 
-/** 
- * Renders the current board state to the users viewport
-*/
-// const drawBoard = board => {
-//   console.log('begin drawBoard()');
-//   //select the board
-//   $test = $('#test');
-//   //for each row of the board
-//   for(let row = 0; row < board.length; row++) {
-//     //add this row to the board
-//     $test.append('<div class="row"></div>');
-//     //for each space in this row
-//     for(let col = 0; col < board.length; col++) {
-//       //add a cell to this row
-//       $('.row').append('<div class="square"><div class="placement"></div></div>');
-//       //index the cell with data atributes
-//     }
-//   }
-// }
 
-const drawBoard = board => {
-  console.log('begin drawBoard()');
-  //select the board
-  $test = $('#test');
-  //for each row of the board
-  for(let row = 0; row < board.length; row++) {
-    //instantiate $row 
-    const $row = $('<div></div>').addClass('row');
-    //for each space in this row
-    for(let col = 0; col < board.length; col++) {
-      //instantiate square
-      const $square = $('<div></div>').addClass('square');
-      //instantiate placement
-      const $placement = $('<div></div>').addClass('placement');
-      $placement.attr('data-row', row);
-      $placement.attr('data-col', col);
+/**
+ * The purpose of this function is to determine if the player has made a valid move, and if 
+ * the move is indeed valid, it will implement that move
+ * 
+ * @param {number} moveRow the row position of the space chosen by the current player
+ * @param {number} moveCol the column position of the space chosen by the current player
+ * @param {number} player the current player
+ * @param {array[][]} board the current board state
+ */
+const processMove = (moveRow, moveCol, player, board) => {
+  //set the current opponent
+  let opponent = (player === 0) ? 1 : 0;
 
-      //add placement to $square element 
-      $square.append($placement);
+  //instantiate flag for whether or not pieces have been flipped
+  let piecesFlipped = false;
 
-      $row.append($square);
+  //initialize flag to track if we have made a valid move
+  let validMove = false;
+
+  //check all directions
+  for (let vertical = -1; vertical <= 1; vertical++) {
+    for (let horizontal = -1; horizontal <= 1; horizontal++) {
+
+      //flip the pieces and record whether or not pieces were flipped
+      validMove = flipPieces (moveRow, moveCol, vertical, horizontal, player, opponent, board);
+
+      //we find any valid flips
+      if (validMove) {
+
+        //record that pieces are flipped indicating this is a valid move
+        piecesFlipped = true;
+
+      }
     }
-  //add this row to the board
-  $test.append($row);
+  }
+
+  //if pieces were flipped
+  if (piecesFlipped) {
+    //this move is valid and the piece can be placed where the player has chosen
+    board[moveRow][moveCol] = player;
+    //switch players
+    currentPlayer = opponent;
+  //if no pieces were flipped
+  } else {
+    //let the user know they need to make a new selection
+    console.log('invalid move, try again');
   }
 }
 
-//POF for placing a disc, will be modified to represent the board array
-const discPlacement = player => {
-  //if the user clicks on a square
-  $('.square').click(function(){
-    //if this is an open space 
-    //DELCOM maybe instead of checking the color we should check the logical state?
-    if($(this).children().css('background-color') === 'rgb(0, 128, 0)') {
-      //if the current player is black
-      if(player === 'black') {
-        //draw black disk in this space
-        $(this).children().toggleClass('black');
-        //increase disc counter by 1
-        discCounter++;
-        //change player
-        player = 'white';
-      } else {
-        //draw white disk in this space
-        $(this).children().toggleClass('white');
-        //change player
-        player = 'black';
-        //increase disc counter by 1
-        discCounter++;
-      }
-    }
-  });
-}
-
 /**
- * Initializes the initial state of the game and renders the board based on that state
+ * The purpose of this function is flip pieces on the board if possible and inform the client
+ * or user that the pieces were flipped
+ * 
+ * It starts at the position the player places at, then moves out in one direction looking for:
+ *  - The current players piece, in which place is stops looking
+ *  - The opponents piece, in which case it records it to flip if it's a valid move
+ *  - A blank space/the edge of the board, in which case it also stops looking
+ * 
+ * @param {number} startRow the row index of the first position to check for an opponents piece
+ * @param {number} startCol the column index of the first position to check for the players piece
+ * @param {number} vertical helper to translate the row index when checking for the players piece
+ * @param {number} horizontal helper to translate the column index when checking for the players piece
+ * @param {number} player the current player
+ * @param {number} opponent the current opponent
+ * @param {array[][]} board the current board state
+ * 
+ * @return {boolean} Return true if pieces are flipped and false otherwise
  */
-const startGame = () => {
-  //set the initial state of the logical board
-  const board = [
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ','w','b',' ',' ',' '],
-    [' ',' ',' ','b','w',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' '],    
-  ];
+const flipPieces = (startRow, startCol, vertical, horizontal, player, opponent, board) => {
 
-  drawBoard(board);
+  //instantiate flipPositions
+  const flipPositions = [];
 
-  //for each row of the board
-    //for each space in this row
-      //if a user clicks on this space
-        //if this space is empty
-          //if this is player black
+  //store the first space we need to check in the "passed in" direction (i.e. vertical/horizontal)
+  let row = startRow + vertical;
+  let col = startCol + horizontal;
 
-          //if this is player white
-        //else
-          //alert the user that this space is occupied
+  if(board[row][col] === player) {
+    return false;
+  }
+
+  //while we have not seen the players color
+  while (board[row][col] !== player) {
+
+    //if we have not seen the opponents piece before we see a blank space
+    if (board[row][col] === null) {
+
+      //we cannot flip pieces in the passed in direction
+      return false;
+
+    }
+
+    //if we see the opponents piece
+    if (board[row][col] === opponent) {
+
+      //record the current position for our output
+      flipPositions.push({
+        row: row,
+        col: col
+      });
+
+    }
+
+    //update the position we are checking
+    row += vertical;
+    col += horizontal;
+  }
+
+  //for each of the positions we need to flip at
+  for (let i = 0; i < flipPositions.length; i++) {
+    //flip the pieces to the current players color
+    board[flipPositions[i].row][flipPositions[i].col] = player;
+  }
+
+  //return that pieces were flipped
+  return true;
 
 }
 
-//flip over pieces depending on the board state
-const updateState = () => {
-
-}
-
-startGame();
-//DELCOM we may have to encapsulate this in its own function to be part of the board drawing method
-discPlacement(player);
+// module.exports = processMove;
+exports.flipPieces = flipPieces;
+exports.processMove = processMove;
